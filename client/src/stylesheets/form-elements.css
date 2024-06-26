@@ -1,0 +1,16 @@
+input {
+  height: 20px;
+  padding: 10px 10px;
+  border: 2px solid #ccc;
+  width: 94%;
+}
+
+.ant-form-item {
+  margin-bottom: 5px !important;
+}
+
+.primary-contained-btn {
+  background-color: var(--primary);
+  color: white;
+  padding: 10px 20px;
+}
