@@ -1,11 +1,21 @@
 import React from 'react'
-import { Form } from 'antd'
+import { Form, message } from 'antd'
 import { Link } from 'react-router-dom'
+import { loginUser } from '../../../apiCalls/users.jsx';
 function Login() {
 
-    const onFinish = (values) => {
-        console.log(values)
-    }
+    const onFinish = async (values) => {
+        try {
+            const response = await loginUser(values)
+            if (response.success) {
+                message.success(response.message)
+            } else {
+                message.error(response.message)
+            }
+        } catch (error) {
+            message.error(error.message)
+        }
+    };
 
 
     return (
