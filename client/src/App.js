@@ -4,6 +4,7 @@ import './stylesheets/textelements.css';
 import './stylesheets/alignments.css';
 import './stylesheets/custom-components.css';
 import './stylesheets/form-elements.css';
+import './stylesheets/layout.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './pages/common/login';
 import Register from './pages/common/register';
