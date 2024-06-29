@@ -1,27 +1,27 @@
 const router = require("express").Router();
-const User = require("../models/userModel.js");
+const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const authMiddleware = require("../middlewares/authMiddleware.js");
+const authMiddleware = require("../middlewares/authMiddleware");
 
-//user registration
+// user registration
 
 router.post("/register", async (req, res) => {
   try {
-    // check user exists
+    // check if user already exists
     const userExists = await User.findOne({ email: req.body.email });
     if (userExists) {
       return res
         .status(200)
-        .send({ message: "User already Exist", success: false });
+        .send({ message: "User already exists", success: false });
     }
 
-    //hash password
+    // hash password
     const salt = await bcrypt.genSalt(10);
-    const hashedpassword = await bcrypt.hash(req.body.password, salt);
-    req.body.password = hashedpassword;
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    req.body.password = hashedPassword;
 
-    //create new user
+    // create new user
     const newUser = new User(req.body);
     await newUser.save();
     res.send({
@@ -37,34 +37,35 @@ router.post("/register", async (req, res) => {
   }
 });
 
-//user login
+// user login
 
 router.post("/login", async (req, res) => {
   try {
-    //check if user exist
+    // check if user exists
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
       return res
         .status(200)
-        .send({ message: "user does not exist", success: false });
+        .send({ message: "User does not exist", success: false });
     }
 
-    //check password
-    const validpassword = await bcrypt.compare(
+    // check password
+    const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
     );
-    if (!validpassword) {
+    if (!validPassword) {
       return res
         .status(200)
-        .send({ message: "Invalid Password", success: false });
+        .send({ message: "Invalid password", success: false });
     }
+
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
     res.send({
-      message: "User login successfully",
+      message: "User logged in successfully",
       success: true,
       data: token,
     });
@@ -77,12 +78,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//get user info
+// get user info
+
 router.post("/get-user-info", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.body.userId);
     res.send({
-      message: "User data fetch successfully",
+      message: "User info fetched successfully",
       success: true,
       data: user,
     });

@@ -8,12 +8,10 @@ module.exports = (req, res, next) => {
     req.body.userId = userId;
     next();
   } catch (error) {
-    res
-      .status(401)
-      .send({
-        message: "You are not Authenticated",
-        data: error,
-        success: false,
-      });
+    res.status(401).send({
+      message: "You are not authenticated",
+      data: error,
+      success: false,
+    });
   }
 };
