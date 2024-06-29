@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 app.use(express.json());
-const dbConfig = require("d:/Subir/online_exam/online_exam/server/config/dbConfig");
+// const dbConfig = require("./config/dbConfig");
+const mongoose = require("mongoose");
 
 const usersRoute = require("./routes/usersRoute");
 const examsRoute = require("./routes/examsRoute");
@@ -27,4 +28,16 @@ if (process.env.NODE_ENV === "production") {
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
+});
+
+mongoose.connect(process.env.MONGO_URL);
+
+const connection = mongoose.connection;
+
+connection.on("connected", () => {
+  console.log("Mongo Db Connection Successful");
+});
+
+connection.on("error", (err) => {
+  console.log("Mongo Db Connection Failed");
 });
